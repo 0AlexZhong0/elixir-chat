@@ -1,14 +1,15 @@
 import { StyleSheet, View } from "react-native";
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat, IMessage, Send } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Ionicon from "react-native-vector-icons/Ionicons";
-import generateChatHeaderProps from "../../data/chat/generateChatHeaderProps";
 import generateIMessage from "../../data/chat/generateIMessage";
 import AccessoryBar from "./AccessoryBar";
 import ChatHeader from "./ChatHeader";
 import { useNavigation, useRoute } from "@react-navigation/core";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "../../types";
 
 const renderSend = (props: Send["props"]) => (
 	<Send {...props} containerStyle={{ justifyContent: "center" }}>
@@ -22,11 +23,16 @@ const scrollToBottomComponent = () => (
 	</View>
 );
 
+type ChatScreenRouteProp = StackScreenProps<
+	RootStackParamList,
+	"Chats"
+>["route"];
+
 const Chats = () => {
-	const route = useRoute();
+	const route = useRoute<ChatScreenRouteProp>();
+
 	const navigation = useNavigation();
 	const insets = useSafeAreaInsets();
-	const headerProps = useMemo(generateChatHeaderProps, []);
 	const [messages, setMessages] = useState<IMessage[]>([]);
 
 	useEffect(() => {
@@ -46,7 +52,7 @@ const Chats = () => {
 	return (
 		<View style={styles.container}>
 			<ChatHeader
-				{...headerProps}
+				{...route.params}
 				style={{ paddingTop: insets.top }}
 				onBackArrowPress={navigation.goBack}
 			/>

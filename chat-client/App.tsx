@@ -20,28 +20,17 @@ import { generateConversationItemProps } from "./src/data/conversation/generateC
 import brands from "./src/styles/brands";
 
 // this enables the uuid in the app
+import { RootStackParamList } from "./src/types";
+import ConversationScreen from "./src/screens/ConversationScreen";
+
 import "react-native-get-random-values";
 
-const Stack = createStackNavigator();
-
-const ConversationsComp = () => {
-	const insets = useSafeAreaInsets();
-
-	return (
-		<View style={{ paddingTop: insets.top }}>
-			<Conversations
-				chats={Array(24)
-					.fill(0)
-					.map((_) => generateConversationItemProps())}
-			/>
-		</View>
-	);
-};
+const RootStack = createStackNavigator<RootStackParamList>();
 
 function MainNavigation() {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator
+			<RootStack.Navigator
 				screenOptions={{
 					headerShown: false,
 					cardStyle: {
@@ -49,9 +38,9 @@ function MainNavigation() {
 					},
 				}}
 			>
-				<Stack.Screen name="Conversations" component={ConversationsComp} />
-				<Stack.Screen name="Chats" component={Chats} />
-			</Stack.Navigator>
+				<RootStack.Screen name="Conversations" component={ConversationScreen} />
+				<RootStack.Screen name="Chats" component={Chats} />
+			</RootStack.Navigator>
 		</NavigationContainer>
 	);
 }

@@ -12,19 +12,29 @@ type SearchBarProps = TextInputProps & {
 	showIcon?: boolean;
 };
 
-const SearchBar = ({ touchable, showIcon, ...props }: SearchBarProps) => {
+const SearchBar = ({
+	touchable,
+	showIcon,
+	...textInputProps
+}: SearchBarProps) => {
 	const styles = getStyles(showIcon);
 
 	return (
-		<Row activeOpacity={0.8} touchable={touchable}>
+		<Row
+			activeOpacity={0.8}
+			touchable={touchable}
+			style={[styles.bar, textInputProps.style]}
+		>
 			{showIcon && (
 				<Ionicon style={styles.searchIcon} name="search-outline" size={20} />
 			)}
 			{!touchable ? (
-				<TextInput {...props} style={[styles.bar, props.style]} />
+				<TextInput {...textInputProps} />
 			) : (
-				<Row {...props} style={[styles.bar, props.style]}>
-					<AppText style={appStyles.placeholder}>{props.placeholder}</AppText>
+				<Row>
+					<AppText style={appStyles.placeholder}>
+						{textInputProps.placeholder}
+					</AppText>
 				</Row>
 			)}
 		</Row>
