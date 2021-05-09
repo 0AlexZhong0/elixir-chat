@@ -18,3 +18,15 @@ mix ecto.migrate
 # to rollback the migration, run
 mix ecto.rollback
 ```
+
+## TODO
+
+- create the conversation channel
+  - pattern match the channel on the channel_id
+- asynchronously create the message in the database, then brodcast the message out to the clients
+- expose the necessary endpoints, e.g. conversations/:id/messages fetches all the messages of a single conversation
+- add changeset filtering/validations when needed
+
+## Requirements
+
+- only the people who are part of the conversation can see the chat

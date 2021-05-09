@@ -10,10 +10,12 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
     create_attachment_table()
     create_message_table()
     create_message_reaction_table()
+    create_user_conversation_table()
   end
 
   defp create_user_table do
-    create table("user") do
+    create table(:user, primary_key: false) do
+      add :id, :string, primary_key: true
       add :first_name, :string
       add :last_name, :string
       add :is_deleted, :boolean
@@ -28,19 +30,19 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
   end
 
   defp create_conversation_table do
-    create table("conversation") do
+    create table(:conversation) do
       add :title, :string
       add :channel_id, :string
       add :is_deleted, :boolean
       add :deleted_at, :int
-      add :creator_id, references("user")
+      add :creator_id, references(:user)
 
       timestamps()
     end
   end
 
   defp create_emoji_table do
-    create table("emoji") do
+    create table(:emoji) do
       add :url, :string
       add :name, :string
 
@@ -53,7 +55,7 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
     drop_query = "DROP TYPE attachment_type"
     execute(create_query, drop_query)
 
-    create table("attachment") do
+    create table(:attachment) do
       add :type, :attachment_type
       add :thumbnail, :string
       add :url, :string
@@ -65,12 +67,12 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
   end
 
   defp create_message_table do
-    create table("message") do
+    create table(:message) do
       add :text, :string, size: 2000
-      add :from_id, references("user")
-      add :reply_to, references("message")
-      add :attachment_id, references("attachment")
-      add :conversation_id, references("conversation")
+      add :from_id, references(:user)
+      add :reply_to, references(:message)
+      add :attachment_id, references(:attachment)
+      add :conversation_id, references(:conversation)
 
       add :is_deleted, :boolean
       add :deleted_at, :int
@@ -80,10 +82,20 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
   end
 
   defp create_message_reaction_table do
-    create table("message_reaction") do
-      add :emoji_id, references("emoji")
-      add :reactor_id, references("user")
-      add :message_id, references("message")
+    create table(:message_reaction) do
+      add :emoji_id, references(:emoji)
+      add :reactor_id, references(:user)
+      add :message_id, references(:message)
+    end
+  end
+
+  # many to many relationshios
+  defp create_user_conversation_table do
+    create table(:user_conversation) do
+      add :user_id, references(:user)
+      add :conversation_id, references(:conversation)
+
+      timestamps()
     end
   end
 end
