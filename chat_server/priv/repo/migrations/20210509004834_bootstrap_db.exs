@@ -35,7 +35,7 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
       add :channel_id, :string
       add :is_deleted, :boolean
       add :deleted_at, :int
-      add :creator_id, references(:user)
+      add :creator_id, references(:user, column: :id, type: :string)
 
       timestamps()
     end
@@ -69,7 +69,7 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
   defp create_message_table do
     create table(:message) do
       add :text, :string, size: 2000
-      add :from_id, references(:user)
+      add :from_id, references(:user, column: :id, type: :string)
       add :reply_to, references(:message)
       add :attachment_id, references(:attachment)
       add :conversation_id, references(:conversation)
@@ -84,16 +84,16 @@ defmodule ChatServer.Repo.Migrations.BootstrapDb do
   defp create_message_reaction_table do
     create table(:message_reaction) do
       add :emoji_id, references(:emoji)
-      add :reactor_id, references(:user)
       add :message_id, references(:message)
+      add :reactor_id, references(:user, column: :id, type: :string)
     end
   end
 
   # many to many relationshios
   defp create_user_conversation_table do
     create table(:user_conversation) do
-      add :user_id, references(:user)
       add :conversation_id, references(:conversation)
+      add :user_id, references(:user, column: :id, type: :string)
 
       timestamps()
     end
