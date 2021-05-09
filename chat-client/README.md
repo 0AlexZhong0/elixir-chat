@@ -11,5 +11,6 @@ Then go to `http://localhost:19002`, scan the QR code in the web browser.
 
 ## TODO
 
-- create the search bar
+- create the navigation function to redirect into rooms
+- create the search page
 - create the message list

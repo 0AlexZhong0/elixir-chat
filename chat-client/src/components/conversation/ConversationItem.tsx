@@ -4,24 +4,41 @@ import { StyleSheet, View, ViewProps } from "react-native";
 import Row from "../Row";
 import Avatar from "../Avatar";
 import AppText from "../AppText";
+import { useNavigation } from "@react-navigation/core";
 
-export type ChatItemProps = {
+export type ConversationItemProps = {
 	title: string;
+	channelId: string;
 	thumbnail: string;
 	lastReceivedMsg: string;
 	// unix timestamp in seconds
 	lastReceivedTime: string;
 } & ViewProps;
 
-const ChatItem = ({
+const ConversationItem = ({
+	channelId,
 	title,
 	thumbnail,
 	lastReceivedMsg,
 	lastReceivedTime,
 	...props
-}: ChatItemProps) => {
+}: ConversationItemProps) => {
+	const navigation = useNavigation();
+
 	return (
-		<Row {...props}>
+		<Row
+			{...props}
+			touchable
+			activeOpacity={0.8}
+			onPress={() =>
+				// TODO: define the specific type for the route parrams
+				navigation.navigate("Chats", {
+					title,
+					channelId,
+					thumbnail,
+				})
+			}
+		>
 			<Avatar
 				source={{ uri: thumbnail }}
 				touchableOpacityProps={{ style: { padding: 6 } }}
@@ -45,4 +62,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ChatItem;
+export default ConversationItem;

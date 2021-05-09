@@ -48,6 +48,10 @@ const brands = {
 	typography,
 	colours: {
 		white: "#fff",
+		facebook: {
+			lightGray: "#f7f7f7",
+		},
+		placeholder: "#8e8e8e",
 	},
 };
 
